@@ -1,0 +1,33 @@
+  services:
+    db:
+      image: mysql:9.7.1
+      restart: always
+      container_name: ecom-mysql
+      ports:
+        - "3307:3306"
+      environment:
+        MYSQL_ROOT_PASSWORD: 123456
+        MYSQL_DATABASE: ecom_db
+      volumes:
+          - mysql-data:/var/lib/mysql
+      healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-p123456"]
+        interval: 5s
+        timeout: 3s
+        retries: 5
+    backend:
+      image: ecom:v1
+      container_name: ecom-backend
+      ports:
+        - "8080:8009"
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ecom_db?useSSL=false&allowPublicKeyRetrieval=true
+        SPRING_DATASOURCE_USERNAME: root
+        SPRING_DATASOURCE_PASSWORD: 123456
+        SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      depends_on:
+        db:
+          condition: service_healthy
+  volumes:
+    mysql-data:
+

@@ -1,0 +1,27 @@
+#Các file không nằm trong cùng thư mục chứa Dokerfile thì nó se không copy đưa vào image
+#Ví dụ như READE.md , ER Diagram, ... Bỏ vô tùy cấu trúc dự án
+
+target/
+bin/
+.metadata/
+#ide
+.idea/
+
+#version control
+.gitignore
+.git/
+.gitattributes
+
+#Documents
+README.md
+
+#tmp and logs
+*.log
+logs/
+tmp/
+
+.DS_Store
+ER Diagram/
+#Docker
+.dockerignore
+Dockerfile
