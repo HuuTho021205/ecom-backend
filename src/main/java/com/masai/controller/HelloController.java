@@ -8,6 +8,6 @@ public class HelloController {
 
     @GetMapping("api/public/test")
     public String TestCICD(){
-        return "hello ci/cd";
+        return "hello ci/cd v2";
     }
 }
