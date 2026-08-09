@@ -1,0 +1,42 @@
+name: Manual Deploy Spring Boot to Azure
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  id-token: write # Bắt buộc cho xác thực OIDC
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and Deploy to Container App
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          registryUrl: .azurecr.io
+          containerAppName:
+          resourceGroup:
+          imageToBuild: .azurecr.io/:${{ github.sha }}
