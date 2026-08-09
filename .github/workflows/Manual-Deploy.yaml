@@ -36,7 +36,7 @@ jobs:
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}
-          registryUrl: .azurecr.io
-          containerAppName:
-          resourceGroup:
-          imageToBuild: .azurecr.io/:${{ github.sha }}
+          registryUrl: ecomrsrg.azurecr.io
+          containerAppName: ecom-backend
+          resourceGroup: ecom-research-rg
+          imageToBuild: ecomrsrg.azurecr.io/ecom-backend:${{ github.sha }}
